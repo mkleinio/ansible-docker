@@ -1,0 +1,36 @@
+---
+- hosts: all
+  remote_user: root
+
+  tasks:
+    - name: Install Git
+      include_role:
+        name: ANXS.git
+
+    - name: Download project
+      git:
+        repo: 'https://github.com/azat-co/nodejs-hello-world'
+        dest: 'hello-world'
+
+    - name: Install NodeJS
+      include_role:
+        name: geerlingguy.nodejs
+
+    - name: Install project dependencies
+      command: npm install
+      args:
+        chdir: hello-world/
+
+    - name: Install Forever
+      npm: name=forever global=yes state=present
+
+    - name: Get Forever's list of running processes
+      command: forever list
+      register: forever_list
+      changed_when: false
+
+    - name: Start service
+      command: forever start web.js
+      when: "forever_list.stdout.find('hello-world/web.js') == -1"
+      args:
+        chdir: hello-world/

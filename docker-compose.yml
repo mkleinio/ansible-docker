@@ -1,0 +1,13 @@
+version: '3'
+services:
+  ansible:
+    image: williamyeh/ansible:debian9
+    volumes:
+      - "./ssh/config:/root/.ssh/config"
+      - "./ansible/hosts:/etc/ansible/hosts"
+      - "./playbooks:/root/playbooks"
+    links:
+      - server
+
+  server:
+    build: .
