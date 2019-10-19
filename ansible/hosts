@@ -1,5 +1,5 @@
 [server_hosts]
-ansibledocker_server_[1:3]
+ansible-docker_server_[1:3]
 
 [server_hosts:vars]
 ansible_python_interpreter=/usr/bin/python3
